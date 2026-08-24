@@ -1,0 +1,72 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap');
+
+@layer base {
+  :root {
+    --background: 220 20% 7%;
+    --foreground: 210 40% 96%;
+
+    --card: 220 18% 11%;
+    --card-foreground: 210 40% 96%;
+
+    --popover: 220 18% 11%;
+    --popover-foreground: 210 40% 96%;
+
+    --primary: 210 100% 60%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 220 16% 16%;
+    --secondary-foreground: 210 40% 96%;
+
+    --muted: 220 14% 14%;
+    --muted-foreground: 215 16% 55%;
+
+    --accent: 160 70% 50%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 72% 55%;
+    --destructive-foreground: 0 0% 100%;
+
+    --success: 130 60% 45%;
+    --success-foreground: 0 0% 100%;
+
+    --game-blue: 210 100% 60%;
+    --game-surface: 210 100% 55%;
+
+    --border: 220 14% 18%;
+    --input: 220 14% 18%;
+    --ring: 210 100% 60%;
+
+    --radius: 0.75rem;
+
+    --sidebar-background: 220 18% 11%;
+    --sidebar-foreground: 210 40% 96%;
+    --sidebar-primary: 210 100% 60%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 220 16% 16%;
+    --sidebar-accent-foreground: 210 40% 96%;
+    --sidebar-border: 220 14% 18%;
+    --sidebar-ring: 210 100% 60%;
+
+    --font-display: 'Space Grotesk', sans-serif;
+    --font-body: 'Inter', sans-serif;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-family: var(--font-body);
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-display);
+  }
+}
