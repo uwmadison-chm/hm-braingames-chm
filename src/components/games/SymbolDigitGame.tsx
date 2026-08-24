@@ -4,15 +4,12 @@ import { ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import SymbolBox from "@/components/games/SymbolBox";
 import GameDialog from "@/components/games/GameDialog";
-import { usePigRun } from "@/hooks/use-pig-run.ts";
-
 
 const SYMBOLS = ["α", "β", "γ", "δ", "ε", "ζ", "η", "θ", "ι", "σ"];
 const TIME_LIMIT = 60;
 const SYMBOL_COUNT = 9;
 
 export default function SymbolDigitGame() {
-  usePigRun("symbol-digit");
   const navigate = useNavigate();
   const [shuffledSymbols, setShuffledSymbols] = useState<string[]>([]);
   const [currentSymbol, setCurrentSymbol] = useState("");
