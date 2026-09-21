@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState, useCallback } from "react";
+import { restartPage } from "@/lib/refresh";
 import { useNavigate } from "react-router-dom";
 import { ArrowLeft, Delete } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -224,7 +225,7 @@ export default function DigitSpanGame() {
         </div>
         <div className="flex gap-3 mt-8">
           <Button
-            onClick={() => window.location.reload()}
+            onClick={() => restartPage()}
             className="bg-primary-foreground text-game-blue hover:bg-primary-foreground/90 font-semibold"
           >
             Play Again

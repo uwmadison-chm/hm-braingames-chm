@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef, useCallback } from "react";
+import { restartPage } from "@/lib/refresh";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, RefreshCw } from "lucide-react";
@@ -336,7 +337,7 @@ export default function PopBubbles() {
           Pop the Bubbles
         </h1>
         <button
-          onClick={() => window.location.reload()}
+          onClick={() => restartPage()}
           className="ml-auto p-2 text-foreground hover:opacity-70 transition-opacity"
         >
           <RefreshCw className="w-5 h-5" />

@@ -1,4 +1,5 @@
 import { useEffect, useState, useCallback } from "react";
+import { restartPage } from "@/lib/refresh";
 import { useNavigate } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -185,7 +186,7 @@ export default function SymbolDigitGame() {
               </p>
               <div className="flex gap-3">
                 <Button
-                  onClick={() => window.location.reload()}
+                  onClick={() => restartPage()}
                   className="bg-primary-foreground text-game-blue hover:bg-primary-foreground/90 font-semibold"
                 >
                   Play Again

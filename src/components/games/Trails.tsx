@@ -1,4 +1,5 @@
 import * as React from "react";
+import { restartPage } from "@/lib/refresh";
 import RefreshRounded from "@mui/icons-material/RefreshRounded";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import { Button } from "@/components/ui/button";
@@ -285,7 +286,7 @@ class TrailsGameInner extends React.Component<
     }
   };
 
-  clickHome = () => window.location.reload();
+  clickHome = () => restartPage();
 
   resetGame = () => {
     const maxPlots = isMobile() ? 40 : 55;
