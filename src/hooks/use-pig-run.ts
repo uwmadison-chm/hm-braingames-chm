@@ -19,20 +19,24 @@ export function usePigRun(taskCode: string) {
       // sendBeacon always sends credentials, which browsers refuse to accept
       // alongside Pig's wildcard Access-Control-Allow-Origin. fetch with
       // keepalive survives page unload the same way, without that problem.
-      fetch(`${PIG_URL}/task/${taskCode}/run/${runId}`, {
+      fetch(`${PIG_URL}/v1/task/${taskCode}/run/${runId}`, {
         method: "POST",
         keepalive: true,
         credentials: "omit",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          "2": {
-            timestamp: new Date().toISOString(),
-            data: { type: "game_left" },
+          events: {
+            "2": {
+              data: {
+                type: "game_left",
+                timestamp: new Date().toISOString(),
+              },
+            },
           },
         }),
       }).catch(() => {});
 
-      fetch(`${PIG_URL}/task/${taskCode}/run/${runId}/finalize`, {
+      fetch(`${PIG_URL}/v1/task/${taskCode}/run/${runId}/finalize`, {
         method: "POST",
         keepalive: true,
         credentials: "omit",
@@ -41,22 +45,28 @@ export function usePigRun(taskCode: string) {
 
     (async () => {
       try {
-        const startResponse = await fetch(`${PIG_URL}/task/${taskCode}/run`, {
+        const startResponse = await fetch(`${PIG_URL}/v1/task/${taskCode}/run`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ participant_id: participantId }),
+          body: JSON.stringify({
+            parameters: { participant_id: participantId },
+          }),
         });
         if (!startResponse.ok) return;
         const { run_id } = await startResponse.json();
         runId = run_id;
 
-        await fetch(`${PIG_URL}/task/${taskCode}/run/${run_id}`, {
+        await fetch(`${PIG_URL}/v1/task/${taskCode}/run/${run_id}`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
-            "1": {
-              timestamp: new Date().toISOString(),
-              data: { type: "game_started" },
+            events: {
+              "1": {
+                data: {
+                  type: "game_started",
+                  timestamp: new Date().toISOString(),
+                },
+              },
             },
           }),
         });
