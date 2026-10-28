@@ -55,7 +55,7 @@ export default function Index() {
             The Healthy Minds Brain Games
           </h1>
           <p className="text-lg text-muted-foreground mx-auto max-w-2xl">
-            A collection of brain games created by the Center for Healthy Minds.
+            Give your brain a workout with this collection of games created by the Center for Healthy Minds!
           </p>
         </div>
       </div>

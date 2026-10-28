@@ -627,10 +627,14 @@ class TwentyNumInner extends React.Component<TwentyNumInnerProps, TwentyNumState
           </p>
 
           <Board tiles={tiles} />
-
-          <div className="text-white/50 text-xs text-center mt-1">
-            Swipe to move tiles!
-          </div>
+          <p className="text-white/80 text-sm max-w-[540px] w-full text-center">
+            Instructions:
+          </p>
+          <ol className="text-white/80 text-sm max-w-[540px] w-full list-decimal list-inside space-y-1 mt-1">
+            <li>Swipe or use arrow keys to move tiles. Tiles will slide in the same direction.</li>
+            <li>Sliding tiles with the same number will sum them into one new tile.</li>
+            <li>Keep merging tiles to reach 2048! Be careful to not fill the board and get stuck!</li>
+          </ol>
           <Button onClick={this.resetGame} className="bg-[#8f7a66] hover:bg-[#7a6a57] text-white font-semibold px-6">
             New Game
           </Button>
