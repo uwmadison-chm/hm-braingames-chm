@@ -1,85 +1,48 @@
 import { useEffect } from "react";
+import * as pig from "@uwmadison-chm/pig-client";
 import { useParticipant } from "@/ParticipantContext";
 
 const PIG_URL = import.meta.env.VITE_PIG_URL;
 
-// Starts a Pig run when the participant opens a game page, and tells Pig
-// they left (and finalizes the run) when they navigate away or close the tab.
+// Starts a Pig run when the participant opens a game page, and records that
+// they left (and finalizes the run) when they navigate away.
+//
+// Browsers don't reliably let a page send anything as the tab closes, so the
+// client doesn't try. With finalizeWhenAbandoned, a run left open that way is
+// finalized the next time the participant opens the site.
 export function usePigRun(taskCode: string) {
   const { participantId } = useParticipant();
 
   useEffect(() => {
-    let runId: string | null = null;
-    let ended = false;
-
-    const endRun = () => {
-      if (ended || !runId) return;
-      ended = true;
-
-      // sendBeacon always sends credentials, which browsers refuse to accept
-      // alongside Pig's wildcard Access-Control-Allow-Origin. fetch with
-      // keepalive survives page unload the same way, without that problem.
-      fetch(`${PIG_URL}/v1/task/${taskCode}/run/${runId}`, {
-        method: "POST",
-        keepalive: true,
-        credentials: "omit",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          events: {
-            "2": {
-              data: {
-                type: "game_left",
-                timestamp: new Date().toISOString(),
-              },
-            },
-          },
-        }),
-      }).catch(() => {});
-
-      fetch(`${PIG_URL}/v1/task/${taskCode}/run/${runId}/finalize`, {
-        method: "POST",
-        keepalive: true,
-        credentials: "omit",
-      }).catch(() => {});
-    };
+    let run: pig.Run | null = null;
+    let cancelled = false;
 
     (async () => {
       try {
-        const startResponse = await fetch(`${PIG_URL}/v1/task/${taskCode}/run`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            parameters: { participant_id: participantId },
-          }),
-        });
-        if (!startResponse.ok) return;
-        const { run_id } = await startResponse.json();
-        runId = run_id;
-
-        await fetch(`${PIG_URL}/v1/task/${taskCode}/run/${run_id}`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            events: {
-              "1": {
-                data: {
-                  type: "game_started",
-                  timestamp: new Date().toISOString(),
-                },
-              },
-            },
-          }),
-        });
+        const started = await pig.start(
+          PIG_URL,
+          taskCode,
+          { participant_id: participantId },
+          { finalizeWhenAbandoned: true },
+        );
+        // The page was left before the run finished starting.
+        if (cancelled) {
+          await started.finalize();
+          return;
+        }
+        run = started;
+        run.add({ type: "game_started" });
       } catch (err) {
         console.error(`Pig: failed to start run for task "${taskCode}"`, err);
       }
     })();
 
-    window.addEventListener("pagehide", endRun);
-
     return () => {
-      window.removeEventListener("pagehide", endRun);
-      endRun();
+      cancelled = true;
+      if (run) {
+        run.add({ type: "game_left" });
+        run.finalize();
+      }
     };
   }, [taskCode, participantId]);
 }

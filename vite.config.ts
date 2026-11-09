@@ -13,6 +13,10 @@ export default defineConfig(({ mode }) => ({
       overlay: false,
     },
   }, 
+  // The Pig client starts a web worker, which Vite's dev pre-bundling loses track of.
+  optimizeDeps: {
+    exclude: ["@uwmadison-chm/pig-client"],
+  },
   plugins: [react(), mode === "development" && componentTagger()].filter(Boolean),
   resolve: {
     alias: {
